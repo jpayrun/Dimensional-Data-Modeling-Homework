@@ -1,0 +1,9 @@
+your_profile_name:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: './db.duckdb'
+      extensions:
+        - httpfs
+        - parquet
