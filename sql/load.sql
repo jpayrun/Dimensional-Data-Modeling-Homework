@@ -21,7 +21,7 @@ insert into actors
             select
                 *,
             case
-                when ty.avg_rating > 8 then 'start'
+                when ty.avg_rating > 8 then 'star'
             when ty.avg_rating > 7 then 'good'
             when ty.avg_rating > 6 then 'average'
             else 'bad'
@@ -32,9 +32,14 @@ insert into actors
 
     select
             coalesce(ty.actor, ly.actor) as actor,
-            ty.films as films,
-            ty.quality_class,
-            ty.is_active,
+            case
+                when ly.films is not null then
+                    ly.films || ty.films
+                when ty.films is null then ly.films
+                else ty.films
+            end as films,
+            coalesce(ty.quality_class, ly.quality_class) as quality_class,
+            coalesce(ty.is_active, ly.is_active) as is_active,
             coalesce(ty.year, ly.year + 1) as year
     from this_year ty
             full outer join last_year ly
